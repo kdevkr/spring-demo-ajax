@@ -1,0 +1,86 @@
+<html>
+<head>
+</head>
+<body>
+Hello World
+<p><button onclick="ajaxList();">List 응답</button></p>
+<p><button onclick="ajaxMap();">Map 응답</button></p>
+<p><button onclick="ajaxEntity();">ResponseEntity 응답</button></p>
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+function ajaxList(){
+	var dataSet = new Object();
+	dataSet.username = "kdevkr";
+	dataSet.password = "kdevpass";
+	$.ajax({
+		type	: 'GET', // method
+		url		: 'list',
+		//url		: 'list?username=kdevkr&password=kdevpass', // GET 요청은 데이터가 URL 파라미터로 포함되어 전송됩니다.
+		async	: 'true', // true
+		data 	: dataSet, // GET 요청은 지원되지 않습니다.
+		processData	: true, // GET 요청은 데이터가 바디에 포함되는 것이 아니기 때문에 URL에 파라미터 형식으로 추가해서 전송해줍니다.
+		contentType : 'application/json', // 'application/x-www-form-urlencoded; charset=UTF-8'
+		//dataType	: [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
+		beforeSend  : function(){
+		    // HTTP 요청 전에 호출된다
+		},
+		success	: function(data, status, xhr){
+		    // 응답 파라미터를 하나로 지정 가능
+			// 정상적으로 응답 받았을 경우에 요청된다
+			console.log("success", data);
+		},
+		error	: function(xhr, status, error){
+		    // 응답 파라미터를 하나로 지정 가능
+			// 응답을 받지 못하였거나, 정상적인 응답이나 데이터 형식이 dataType과 같지 않아서 파싱하지 못했을 경우에 호출된다.
+			console.log("error", error);
+		},
+		complete : function(xhr, status){
+		    // 응답 파라미터를 하나로 지정 가능
+		   // success와 error 콜백이 호출된 후에 반드시 호출된다. finally라고 보면 된다
+		   alert("Complete!");
+		  }
+		});
+}
+function ajaxMap(){
+	var dataSet = new Object();
+	dataSet.username = "kdevkr";
+	dataSet.password = "kdevpass";
+	$.ajax({
+		type	: 'PUT', // method
+		url		: 'map', // PUT 요청은 데이터가 요청 바디에 포함됩니다.
+		async	: 'true', // true
+		data 	: JSON.stringify(dataSet),
+		contentType : 'application/json',
+		//dataType	: [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
+		success	: function(data, status, xhr){
+			console.log("success", data);
+		},
+		error	: function(xhr, status, error){
+			console.log("error", error);
+		}
+		});
+}
+function ajaxEntity(){
+	var dataSet = new Object();
+	dataSet.username = "kdevkr";
+	dataSet.password = "kdevpass";
+	$.ajax({
+		type	: 'POST', // method
+		url		: 'entity', // POST 요청은 데이터가 요청 바디에 포함됩니다.
+		async	: 'true', // true
+		data 	: JSON.stringify(dataSet),
+		contentType : 'application/json',
+		//dataType	: [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
+		success	: function(data, status, xhr){
+
+			console.log("success", data);
+		},
+		error	: function(xhr, status, error){
+
+			console.log("error", error);
+		}
+		});
+}
+</script>
+</body>
+</html>
