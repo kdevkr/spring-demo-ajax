@@ -1,10 +1,3 @@
----
-layout: post
-title:  "스프링 컨트롤러와 JQuery간 AJAX 비동기 통신"
-date:   2017-02-12 10:30:00
-categories: Tech
----
-
 *웹 서비스를 만들 때 자주 사용되는 비동기 통신 기술인 AJAX의 사용방법에 대하여 알아보도록 합시다.*
 
 ## [JQuery-Ajax](http://api.jquery.com/jquery.ajax/)
