@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.domain.DataSet;
 
@@ -45,6 +46,16 @@ public class AjaxController {
 	 * - BufferedImagedHttpMessageConverter
 	 */
 	@ResponseBody
+	@RequestMapping(value="/list_model", method=RequestMethod.GET, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public List<String> list_model(@ModelAttribute("dataSet") DataSet dataSet){
+		logger.info("Request List_Model.... - {}", dataSet);
+		List<String> response = new ArrayList<String>();
+		response.add(dataSet.getUsername());
+		response.add(dataSet.getPassword());
+		return response;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value="/list", method=RequestMethod.GET, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public List<String> list(@ModelAttribute("username") String username, @RequestParam("password") String password){
 		logger.info("Request List....");
@@ -53,6 +64,27 @@ public class AjaxController {
 		List<String> response = new ArrayList<String>();
 		response.add(username);
 		response.add(password);
+		return response;
+	}
+	
+	@RequestMapping(value="/list_nobody", method=RequestMethod.GET, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public List<String> list_noresponsebody(@ModelAttribute("username") String username, @RequestParam("password") String password){
+		logger.info("Request List....");
+		logger.info("username : "+username);
+		logger.info("password : "+password);
+		List<String> response = new ArrayList<String>();
+		response.add(username);
+		response.add(password);
+		return response;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/map_get", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> map_get(@RequestBody DataSet dataSet){
+		logger.info("Request Map_Get.... - {}", dataSet);
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("username", dataSet.getUsername());
+		response.put("password", dataSet.getPassword());
 		return response;
 	}
 	
@@ -73,6 +105,20 @@ public class AjaxController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("username", dataSet.getUsername());
 		map.put("password", dataSet.getPassword());
+		
+		//응답과 함깨 HttpStatus를 지정할 수 있습니다.
+		ResponseEntity<Object> response = new ResponseEntity<Object>(map, HttpStatus.OK);
+		return response;
+	}
+	//@ResponseBody
+	@RequestMapping(value="/entity_nobody", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> entity_nobody(@RequestBody DataSet dataSet){
+		logger.info("Request Entity Nobody.... - {}", dataSet);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("username", dataSet.getUsername());
+		map.put("password", dataSet.getPassword());
+		
+		//응답과 함깨 HttpStatus를 지정할 수 있습니다.
 		ResponseEntity<Object> response = new ResponseEntity<Object>(map, HttpStatus.OK);
 		return response;
 	}
