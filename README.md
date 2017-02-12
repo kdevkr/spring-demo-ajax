@@ -60,6 +60,7 @@ $.ajax({
 ```
 
 - List를 응답하는 컨트롤러  
+consumes로 요청 형식을 application/json으로 지정합니다.  ajax로 해당 경로의 요청을 할 경우에는 contentType을 명시해야합니다.
 ```java
 @ResponseBody
 @RequestMapping(value="/list", method=RequestMethod.GET, consumes=MediaType.APPLICATION_JSON_VALUE)
@@ -71,6 +72,7 @@ public List<String> list(@ModelAttribute("username") String username, @RequestPa
 }
 ```
 - Map을 응답하는 컨트롤러  
+produces로 응답 형식을 json으로 지정합니다.  
 ```java
 @ResponseBody
 @RequestMapping(value="/map", method=RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -93,6 +95,8 @@ public ResponseEntity<Object> entity(@RequestBody DataSet dataSet){
   return response;
 }
 ```
+
+*꼭 이렇게만 해야한다는 것은 아닙니다. 어떠한 방식으로 요청을 하고 응답을 하는지 알고자 할 뿐입니다.*
 
 ## Front Ajax 요청 구조  
 - List 컨트롤러로 요청할 경우  
