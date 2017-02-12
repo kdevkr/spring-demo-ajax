@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.example.domain.DataSet;
 
@@ -114,6 +113,18 @@ public class AjaxController {
 	@RequestMapping(value="/entity_nobody", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> entity_nobody(@RequestBody DataSet dataSet){
 		logger.info("Request Entity Nobody.... - {}", dataSet);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("username", dataSet.getUsername());
+		map.put("password", dataSet.getPassword());
+		
+		//응답과 함깨 HttpStatus를 지정할 수 있습니다.
+		ResponseEntity<Object> response = new ResponseEntity<Object>(map, HttpStatus.OK);
+		return response;
+	}
+	@RequestMapping(value="/entity_nobody_param", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> entity_nobody_param(@RequestBody DataSet dataSet, @RequestParam String param){
+		logger.info("Request Entity Nobody.... - {}", dataSet);
+		logger.info("param {}",param);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("username", dataSet.getUsername());
 		map.put("password", dataSet.getPassword());

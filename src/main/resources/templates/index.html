@@ -10,6 +10,7 @@
 <p><button onclick="ajaxMap_Get();">ajaxMap_Get[GET, @RequestBody를 지정할 경우]</button></p>
 <p><button onclick="ajaxEntity();">ajaxEntity[POST, ResponseEntity]</button></p>
 <p><button onclick="ajaxEntityNobody();">ajaxEntityNobody[POST, ResponseEntity]</button></p>
+<p><button onclick="ajaxEntityNobodyParam();">ajaxEntityNobodyParam[POST, ResponseEntity+Param]</button></p>
 <script	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
 function ajaxList(){
@@ -139,6 +140,25 @@ function ajaxEntityNobody(){
     $.ajax({
         type    : 'POST', // method
         url     : 'entity_nobody', // POST 요청은 데이터가 요청 바디에 포함됩니다.
+        async   : 'true', // true
+        data    : JSON.stringify(dataSet),
+        contentType : 'application/json',
+        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
+        success : function(data, status, xhr){
+            console.log("success", data);
+        },
+        error   : function(xhr, status, error){
+            console.log("error", error);
+        }
+        });
+}
+function ajaxEntityNobodyParam(){
+    var dataSet = new Object();
+    dataSet.username = "kdevkr";
+    dataSet.password = "kdevpass";
+    $.ajax({
+        type    : 'POST', // method
+        url     : 'entity_nobody_param?param=kdevkr@gmail.com', // POST 요청은 데이터가 요청 바디에 포함됩니다.
         async   : 'true', // true
         data    : JSON.stringify(dataSet),
         contentType : 'application/json',
