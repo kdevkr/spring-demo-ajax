@@ -1,5 +1,5 @@
 # Spring-Demo-JQuery-Ajax  
-*웹 서비스를 만들 때 자주 사용되는 비동기 통신 기술인 AJAX를 스프링 프레임워크와 연계하여 활용하는 다양한 방식에 대해서 알아보고자 합니다.*  
+> *웹 서비스를 만들 때 자주 사용되는 비동기 통신 기술인 AJAX를 스프링 프레임워크와 연계하여 활용하는 다양한 방식에 대해서 알아보고자 합니다.*  
 
 XHR(XMLHttpRequest)를 직접적으로 이용하는 것보다는 JQuery에서 지원하는 AJAX(Asynchronos Javascript And XML)기능을 활용하도록 하는 것이 나을 것 같다는 생각입니다. 
 - [XMLHttpRequest, Mozilla Developer Network](https://developer.mozilla.org/ko/docs/XMLHttpRequest)  
@@ -69,7 +69,7 @@ Message Converter List
 
 스프링 부트에서는 이러한 부분도 관리해주므로 추가적으로 jackson 라이브러리를 pom.xml에 추가할 필요가 없습니다.  
 
-본 프로젝트에서는 ModelAndView로써 응답하는 방식은 설명하지 않겠습니다. [여기서 확인하도록 합시다](http://www.nextree.co.kr/p11205/)  
+> *본 프로젝트에서는 ModelAndView로써 응답하는 방식은 설명하지 않겠습니다. [여기서 확인하도록 합시다](http://www.nextree.co.kr/p11205/)*  
 
 ### @RequestMapping  
 @RequestMapping에는 요청과 응답과 관련한 프로퍼티를 설정할 수 있습니다.  produces와 consumes는 확실히 알고 넘어가셔야 합니다.  
