@@ -122,4 +122,7 @@ consumes는 어떠한 요청에 대해서 처리할 것인가를 결정하는 �
 #### 3. GET 요청을 통해 보내는데 일정 데이터 크기이상 보내지지 않습니다.  
 - 브라우저별로 URL의 지원 크기가 다릅니다. 그렇기 때문에 POST로 요청 바디에 데이터를 포함시켜 보내는 이유도 바로 이 때문입니다. 물론 서버 측에서도 요청 바디에 대한 크기를 제한할 수 도 있습니다. 
 
+#### 4. 406 - Not Acceptable 응답해요 ㅠㅠ  [2017-02-14]
+- 혹시 @ResponseBody로 List나 Map을 응답하고 계신가요? 응답하기 위해서는 annation-driven 설정이 되어있어야 하고 요청하는 응답 데이터로 변환할 수 있도록 메시지 컨버터가 필요합니다. annotation-driven 설정이 안되있거나 MessageHttpConverter를 등록합시다.
+
 ## Run As - Spring Boot App - http://localhost:8080/ 
