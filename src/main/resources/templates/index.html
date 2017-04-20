@@ -2,17 +2,32 @@
 <head>
 </head>
 <body>
-동작 결과는 F12를 눌러 콘솔로 확인하시기 바랍니다.
+<h1>Spring Demo Ajax - Test Case</h1>
+<ul>
+	<li>Spring boot 1.5.2</li>
+	<li>Spring 4.3.6</li>
+	<li>com.fasterxml.jackson 2.8.6</li>
+</ul>
+
+
 <p><button onclick="ajaxList();">ajaxList[GET]</button></p>
 <p><button onclick="ajaxListModel();">ajaxListModel[GET, @ModelAttribute]</button></p>
-<p><button onclick="ajaxListNobody();">ajaxListNobody[GET, Not @ResponseBody]</button></p>
+<p><button onclick="ajaxListNobody();">ajaxListNobody[GET, Not @ResponseBody]</button> <small>@ResponseBody가 없으므로 뷰 리졸버를 찾게됨</small></p>
 <p><button onclick="ajaxMap();">ajaxMap[PUT, @RequestBody를 지정할 경우]</button></p>
-<p><button onclick="ajaxMap_Get();">ajaxMap_Get[GET, @RequestBody를 지정할 경우]</button></p>
+<p><button onclick="ajaxMap_Get();">ajaxMap_Get[GET, @RequestBody를 지정할 경우]</button> <small>GET은 요청 바디에 데이터가 존재하지 않음</small></p>
 <p><button onclick="ajaxEntity();">ajaxEntity[POST, ResponseEntity]</button></p>
 <p><button onclick="ajaxEntityNobody();">ajaxEntityNobody[POST, ResponseEntity]</button></p>
 <p><button onclick="ajaxEntityNobodyParam();">ajaxEntityNobodyParam[POST, ResponseEntity+Param]</button></p>
+
+<p></p>
+
+<div>
+<h3>Response-</h3>
+<div id="response-panel"></div>
+</div>
 <script	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
+var _response = $('#response-panel');
 function ajaxList(){
 	var dataSet = new Object();
 	dataSet.username = "kdevkr";
@@ -27,10 +42,11 @@ function ajaxList(){
 	        contentType : 'application/json', // List 컨트롤러는 application/json 형식으로만 처리하기 때문에 컨텐트 타입을 지정해야 합니다.
 	        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
 	        success : function(data, status, xhr){
-	            console.log("success", data);
+	        	responseJson(data);
 	        },
-	        error   : function(xhr, status, error){
+	        error   : function(error){
 	            console.log("error", error);
+	            responseError(error);
 	        }
 	        });
 	}
@@ -48,10 +64,11 @@ function ajaxListNobody(){
 	        contentType : 'application/json', // List 컨트롤러는 application/json 형식으로만 처리하기 때문에 컨텐트 타입을 지정해야 합니다.
 	        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
 	        success : function(data, status, xhr){
-	            console.log("success", data);
+	        	responseJson(data);
 	        },
-	        error   : function(xhr, status, error){
+	        error   : function(error){
 	            console.log("error", error);
+	            responseError(error);
 	        }
 	        });
 	}
@@ -69,10 +86,11 @@ function ajaxListModel(){
 	        contentType : 'application/json', // List 컨트롤러는 application/json 형식으로만 처리하기 때문에 컨텐트 타입을 지정해야 합니다.
 	        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
 	        success : function(data, status, xhr){
-	            console.log("success", data);
+	        	responseJson(data);
 	        },
-	        error   : function(xhr, status, error){
+	        error   : function(error){
 	            console.log("error", error);
+	            responseError(error);
 	        }
 	        });
 	}
@@ -88,10 +106,11 @@ function ajaxMap(){
         contentType : 'application/json',
         //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
         success : function(data, status, xhr){
-            console.log("success", data);
+        	responseJson(data);
         },
-        error   : function(xhr, status, error){
+        error   : function(error){
             console.log("error", error);
+            responseError(error);
         }
         });
 }
@@ -107,10 +126,11 @@ function ajaxMap_Get(){
         contentType : 'application/json',
         //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
         success : function(data, status, xhr){
-            console.log("success", data);
+        	responseJson(data);
         },
-        error   : function(xhr, status, error){
+        error   : function(error){
             console.log("error", error);
+            responseError(error);
         }
         });
 }
@@ -126,10 +146,11 @@ function ajaxEntity(){
         contentType : 'application/json',
         //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
         success : function(data, status, xhr){
-            console.log("success", data);
+        	responseJson(data);
         },
-        error   : function(xhr, status, error){
+        error   : function(error){
             console.log("error", error);
+            responseError(error);
         }
         });
 }
@@ -145,10 +166,11 @@ function ajaxEntityNobody(){
         contentType : 'application/json',
         //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
         success : function(data, status, xhr){
-            console.log("success", data);
+        	responseJson(data);
         },
-        error   : function(xhr, status, error){
+        error   : function(error){
             console.log("error", error);
+            responseError(error);
         }
         });
 }
@@ -164,12 +186,25 @@ function ajaxEntityNobodyParam(){
         contentType : 'application/json',
         //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
         success : function(data, status, xhr){
-            console.log("success", data);
+        	responseJson(data);
         },
-        error   : function(xhr, status, error){
+        error   : function(error){
             console.log("error", error);
+            responseError(error);
         }
         });
+}
+
+function convertJson(data){
+	return JSON.stringify(data, true, 2);
+}
+
+function responseJson(data){
+	_response.html(convertJson(data));
+}
+
+function responseError(data){
+	_response.html(data.responseText);
 }
 </script>
 </body>
