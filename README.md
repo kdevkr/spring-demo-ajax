@@ -104,7 +104,7 @@ Message Converter List
 ```
 
 #### Spring 3.1.2  
-> MappgingJackson2HttpMessageConverter로 jackson 2.0을 지원한다
+> MappingJackson2HttpMessageConverter로 jackson 2.0을 지원합니다
 
 ```xml
 <dependency>
@@ -166,12 +166,15 @@ MappingJacksonHttpMessageConverter 미지원
 </dependency>
 ```
 
+> https://github.com/spring-projects/spring-framework/wiki/Migrating-to-Spring-Framework-4.x#jackson-1819  
+위 문서에 따르면 스프링 4.1 부터는 org.codehaus.jackson(1.8 or 1.9)의 지원을 중단하였습니다.  
+
 - 버전별 메시지 컨버터 지원표    
 
-|Spring Version|org.codehaus.jackson|com.fasterxml.jackson|gson|
+|Spring Version|org.codehaus.jackson(1.8 or 1.9)|com.fasterxml.jackson(2.0)|gson|
 |:---:|:---:|:---:|:---:|
-|3.0.x|MappringJacksonHttpMessageConverter|||
-|3.1.2|MappringJacksonHttpMessageConverter|MappingJackson2HttpMessageConverter||
+|3.0.x|MappingJacksonHttpMessageConverter|||
+|3.1.2|MappingJacksonHttpMessageConverter|MappingJackson2HttpMessageConverter||
 |4.+||MappingJackson2HttpMessageConverter|GsonHttpMessageConverter|  
 
 
