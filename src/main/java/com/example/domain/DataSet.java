@@ -1,8 +1,8 @@
 package com.example.domain;
 
 public class DataSet {
-	String username;
-	String password;
+	private String username;
+	private String password;
 	
 	public String getUsername() {
 		return username;

@@ -1,211 +1,225 @@
-<html>
+<!doctype html>
+<html lang="ko">
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<title>Spring Demo Ajax with axios</title>
 </head>
 <body>
-<h1>Spring Demo Ajax - Test Case</h1>
-<ul>
-	<li>Spring boot 1.5.2</li>
-	<li>Spring 4.3.6</li>
-	<li>com.fasterxml.jackson 2.8.6</li>
-</ul>
+<div id="app">
+	<div class="container-fluid">
+		<div class="jumbotron jumbotron-fluid">
+			<div class="container">
+				<h1 class="display-4">{{ appInfo.title }}</h1>
+				<ul class="lead">
+					<li v-for="(dependency, idx) in appInfo.dependencies" :key="idx">{{ dependency }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
-
-<p><button onclick="ajaxList();">ajaxList[GET]</button></p>
-<p><button onclick="ajaxListModel();">ajaxListModel[GET, @ModelAttribute]</button></p>
-<p><button onclick="ajaxListNobody();">ajaxListNobody[GET, Not @ResponseBody]</button> <small>@ResponseBody가 없으므로 뷰 리졸버를 찾게됨</small></p>
-<p><button onclick="ajaxMap();">ajaxMap[PUT, @RequestBody를 지정할 경우]</button></p>
-<p><button onclick="ajaxMap_Get();">ajaxMap_Get[GET, @RequestBody를 지정할 경우]</button> <small>GET은 요청 바디에 데이터가 존재하지 않음</small></p>
-<p><button onclick="ajaxEntity();">ajaxEntity[POST, ResponseEntity]</button></p>
-<p><button onclick="ajaxEntityNobody();">ajaxEntityNobody[POST, ResponseEntity]</button></p>
-<p><button onclick="ajaxEntityNobodyParam();">ajaxEntityNobodyParam[POST, ResponseEntity+Param]</button></p>
-
-<p></p>
-
-<div>
-<h3>Response-</h3>
-<div id="response-panel"></div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<form v-for="(testCase, idx) in testCaseList" :key="idx">
+					<div class="mb-1"><button type="button" class="btn btn-primary" @click="testCase.click">{{testCase.title}}</button></div>
+				</form>
+			</div>
+			<div class="col-md-10">
+				<div id="response-panel" class="border-success">
+					<h3 class="display-5">Response</h3>
+					<hr/>
+					<div class="response-detail">
+						<div v-if="error">
+							<p>{{error.data}}</p>
+							<p class="text-danger">{{error.description}}</p>
+						</div>
+						<div v-else>
+							{{response}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<script	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-var _response = $('#response-panel');
-function ajaxList(){
-	var dataSet = new Object();
-	dataSet.username = "kdevkr";
-	dataSet.password = "kdevpass";
-	    $.ajax({
-	        type    : 'GET', // method
-	        url     : 'list',
-	        //url       : 'list?username=kdevkr&password=kdevpass', // GET 요청은 데이터가 URL 파라미터로 포함되어 전송됩니다.
-	        async   : 'true', // true
-	        data    : dataSet, // GET 요청은 지원되지 않습니다.
-	        processData : true, // GET 요청은 데이터가 바디에 포함되는 것이 아니기 때문에 URL에 파라미터 형식으로 추가해서 전송해줍니다.
-	        contentType : 'application/json', // List 컨트롤러는 application/json 형식으로만 처리하기 때문에 컨텐트 타입을 지정해야 합니다.
-	        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-	        success : function(data, status, xhr){
-	        	responseJson(data);
-	        },
-	        error   : function(error){
-	            console.log("error", error);
-	            responseError(error);
-	        }
-	        });
-	}
-function ajaxListNobody(){
-	var dataSet = new Object();
-	dataSet.username = "kdevkr";
-	dataSet.password = "kdevpass";
-	    $.ajax({
-	        type    : 'GET', // method
-	        url     : 'list_nobody',
-	        //url       : 'list_nobody?username=kdevkr&password=kdevpass', // GET 요청은 데이터가 URL 파라미터로 포함되어 전송됩니다.
-	        async   : 'true', // true
-	        data    : dataSet, // GET 요청은 지원되지 않습니다.
-	        processData : true, // GET 요청은 데이터가 바디에 포함되는 것이 아니기 때문에 URL에 파라미터 형식으로 추가해서 전송해줍니다.
-	        contentType : 'application/json', // List 컨트롤러는 application/json 형식으로만 처리하기 때문에 컨텐트 타입을 지정해야 합니다.
-	        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-	        success : function(data, status, xhr){
-	        	responseJson(data);
-	        },
-	        error   : function(error){
-	            console.log("error", error);
-	            responseError(error);
-	        }
-	        });
-	}
-function ajaxListModel(){
-	var dataSet = new Object();
-	dataSet.username = "kdevkr";
-	dataSet.password = "kdevpass";
-	    $.ajax({
-	        type    : 'GET', // method
-	        url     : 'list_model',
-	        //url       : 'list?username=kdevkr&password=kdevpass', // GET 요청은 데이터가 URL 파라미터로 포함되어 전송됩니다.
-	        async   : 'true', // true
-	        data    : dataSet, // GET 요청은 지원되지 않습니다.
-	        processData : true, // GET 요청은 데이터가 바디에 포함되는 것이 아니기 때문에 URL에 파라미터 형식으로 추가해서 전송해줍니다.
-	        contentType : 'application/json', // List 컨트롤러는 application/json 형식으로만 처리하기 때문에 컨텐트 타입을 지정해야 합니다.
-	        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-	        success : function(data, status, xhr){
-	        	responseJson(data);
-	        },
-	        error   : function(error){
-	            console.log("error", error);
-	            responseError(error);
-	        }
-	        });
-	}
-function ajaxMap(){
-    var dataSet = new Object();
-    dataSet.username = "kdevkr";
-    dataSet.password = "kdevpass";
-    $.ajax({
-        type    : 'PUT', // method
-        url     : 'map', // PUT 요청은 데이터가 요청 바디에 포함됩니다.
-        async   : 'true', // true
-        data    : JSON.stringify(dataSet),
-        contentType : 'application/json',
-        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-        success : function(data, status, xhr){
-        	responseJson(data);
-        },
-        error   : function(error){
-            console.log("error", error);
-            responseError(error);
-        }
-        });
-}
-function ajaxMap_Get(){
-    var dataSet = new Object();
-    dataSet.username = "kdevkr";
-    dataSet.password = "kdevpass";
-    $.ajax({
-        type    : 'GET', // method
-        url     : 'map_get', 
-        async   : 'true', // true
-        data    : dataSet,
-        contentType : 'application/json',
-        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-        success : function(data, status, xhr){
-        	responseJson(data);
-        },
-        error   : function(error){
-            console.log("error", error);
-            responseError(error);
-        }
-        });
-}
-function ajaxEntity(){
-    var dataSet = new Object();
-    dataSet.username = "kdevkr";
-    dataSet.password = "kdevpass";
-    $.ajax({
-        type    : 'POST', // method
-        url     : 'entity', // POST 요청은 데이터가 요청 바디에 포함됩니다.
-        async   : 'true', // true
-        data    : JSON.stringify(dataSet),
-        contentType : 'application/json',
-        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-        success : function(data, status, xhr){
-        	responseJson(data);
-        },
-        error   : function(error){
-            console.log("error", error);
-            responseError(error);
-        }
-        });
-}
-function ajaxEntityNobody(){
-    var dataSet = new Object();
-    dataSet.username = "kdevkr";
-    dataSet.password = "kdevpass";
-    $.ajax({
-        type    : 'POST', // method
-        url     : 'entity_nobody', // POST 요청은 데이터가 요청 바디에 포함됩니다.
-        async   : 'true', // true
-        data    : JSON.stringify(dataSet),
-        contentType : 'application/json',
-        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-        success : function(data, status, xhr){
-        	responseJson(data);
-        },
-        error   : function(error){
-            console.log("error", error);
-            responseError(error);
-        }
-        });
-}
-function ajaxEntityNobodyParam(){
-    var dataSet = new Object();
-    dataSet.username = "kdevkr";
-    dataSet.password = "kdevpass";
-    $.ajax({
-        type    : 'POST', // method
-        url     : 'entity_nobody_param?param=kdevkr@gmail.com', // POST 요청은 데이터가 요청 바디에 포함됩니다.
-        async   : 'true', // true
-        data    : JSON.stringify(dataSet),
-        contentType : 'application/json',
-        //dataType  : [응답 데이터 형식], // 명시하지 않을 경우 자동으로 추측
-        success : function(data, status, xhr){
-        	responseJson(data);
-        },
-        error   : function(error){
-            console.log("error", error);
-            responseError(error);
-        }
-        });
-}
+	$(document).ready(() => {
+		var app = new Vue({
+			el: '#app',
+			data() {
+				return {
+					appInfo: {
+						title: 'Spring Demo Ajax - Test Case',
+						dependencies: [
+							'Spring boot 2.3.3',
+							'com.fasterxml.jackson 2.11.2',
+							'Axios'
+						],
+					},
+					testCaseList: [],
+					error: undefined,
+					response: undefined
+				}
+			},
+			mounted() {
+				console.log(this)
+				this.generateTestCaseList()
+			},
+			methods: {
+				generateTestCaseList() {
+					this.testCaseList = [
+						{ title: 'TEST_001', description: '', click: this.TEST_001, progress: undefined, result: undefined},
+						{ title: 'TEST_001_JSON', description: '', click: this.TEST_001_JSON, progress: undefined, result: undefined},
+						{ title: 'TEST_002', description: '', click: this.TEST_002, progress: undefined, result: undefined},
+						{ title: 'TEST_003', description: '', click: this.TEST_003, progress: undefined, result: undefined},
+						{ title: 'TEST_004', description: '', click: this.TEST_004, progress: undefined, result: undefined},
+						{ title: 'TEST_005', description: '', click: this.TEST_005, progress: undefined, result: undefined},
+						{ title: 'TEST_006', description: '', click: this.TEST_006, progress: undefined, result: undefined},
+						{ title: 'TEST_007', description: '', click: this.TEST_007, progress: undefined, result: undefined},
+						{ title: 'TEST_008', description: '', click: this.TEST_008, progress: undefined, result: undefined},
+					]
+				},
+				TEST_001() {
+					this.error = undefined
+					this.response = undefined
 
-function convertJson(data){
-	return JSON.stringify(data, true, 2);
-}
+					var params = new Object();
+					params.username = "kdevkr";
+					params.password = "kdevpass";
 
-function responseJson(data){
-	_response.html(convertJson(data));
-}
+					axios.get('/TEST_001', {params: params}).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: error.response.data.message, data:error.response.data}
+					})
+				},
+				TEST_001_JSON() {
+					this.error = undefined
+					this.response = undefined
 
-function responseError(data){
-	_response.html(data.responseText);
-}
+					var params = new Object();
+					params.username = "kdevkr";
+					params.password = "kdevpass";
+
+					// Warning...!
+					// https://github.com/axios/axios/issues/755
+					axios.get('/TEST_001_JSON', {
+						params: params,
+						headers: {'Content-Type':'application/json'}
+					}).then(res => {
+						console.log(res.data)
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: 'The server requires Content-Type upon API request, but Axios removes the Content-Type header if the GET request cannot contain the request body and there is no request body.', data:error.response.data}
+					})
+				},
+				TEST_002() {
+					this.error = undefined
+					this.response = undefined
+
+					var params = new Object();
+					params.username = "kdevkr";
+					params.password = "kdevpass";
+
+					axios.get('/TEST_002', {params: params}).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: error.response.data.message, data:error.response.data}
+					})
+				},
+				TEST_003() {
+					this.error = undefined
+					this.response = undefined
+
+					var params = new Object();
+					params.username = "kdevkr";
+					params.password = "kdevpass";
+
+					axios.get('/TEST_003', {params: params}).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: 'An error is generated because there is no view revolver to handle the List object.', data:error.response.data}
+					})
+				},
+				TEST_004() {
+					this.error = undefined
+					this.response = undefined
+
+					var data = new Object();
+					data.username = "kdevkr";
+					data.password = "kdevpass";
+
+					axios.put('/TEST_004', data).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: error.response.data.message, data:error.response.data}
+					})
+				},
+				TEST_005() {
+					this.error = undefined
+					this.response = undefined
+
+					var data = new Object();
+					data.username = "kdevkr";
+					data.password = "kdevpass";
+
+					axios.get('/TEST_005', {data: data}).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: 'GET requests cannot contain data in the request body..', data:error.response.data}
+					})
+				},
+				TEST_006() {
+					this.error = undefined
+					this.response = undefined
+
+					var data = new Object();
+					data.username = "kdevkr";
+					data.password = "kdevpass";
+
+					axios.post('/TEST_006', data).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: error.response.data.message, data:error.response.data}
+					})
+				},
+				TEST_007() {
+					this.error = undefined
+					this.response = undefined
+
+					var data = new Object();
+					data.username = "kdevkr";
+					data.password = "kdevpass";
+
+					axios.post('/TEST_007', data).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: error.response.data.message, data:error.response.data}
+					})
+				},
+				TEST_008() {
+					this.error = undefined
+					this.response = undefined
+
+					var data = new Object();
+					data.username = "kdevkr";
+					data.password = "kdevpass";
+
+					axios.post('/TEST_008', data, {params: {param: 'paramExt'}}).then(res => {
+						this.response = res.data
+					}).catch(error => {
+						this.error = {status: error.response.data.status, description: error.response.data.message, data:error.response.data}
+					})
+				},
+			}
+		})
+	})
 </script>
 </body>
 </html>
