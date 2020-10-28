@@ -1,5 +1,3 @@
-> 해당 정보는 추후 dev-tips으로 이동되어 제공됩니다.
-
 # Spring-Demo-JQuery-Ajax  
 
 > *웹 서비스를 만들 때 자주 사용되는 비동기 통신 기술인 AJAX를 스프링 프레임워크와 연계하여 활용하는 다양한 방식에 대해서 알아보고자 합니다.*  
@@ -11,6 +9,7 @@ XHR(XMLHttpRequest)를 직접적으로 이용하는 것보다는 JQuery에서 �
 JQuery 이외에도 ajax를 지원하는 다양한 라이브러리가 존재합니다. 예를 들어, [Prototypejs](http://prototypejs.org/learn/introduction-to-ajax)도 많이 사용되는 유틸성 라이브러리 중 하나입니다. 그러나 저와 같은 초보자 및 신입 개발자들은 JQuery에 익숙하므로 JQuery가 지원하는 Ajax 기능에 대해서 살펴보고자 합니다.
 
 > Vue.js에서는 [axios](https://github.com/mzabriskie/axios)를 선호한다고 합니다.  
+> Axios에 대한 예제는 axios 브랜치에서 확인하세요.
 
 ## JQuery.ajax  
 제이쿼리에서 제공하는 함수는 다음과 같은 구조로 구성되어 있습니다. 물론 이외에도 생략된 다양한 프로퍼티들이 존재하므로 더 찾아보시면 좋을 것 같습니다. 아래의 형태는 아마도 자주 사용되는 프로퍼티만 모아놓은 부분이라고 할 수 있습니다.  
